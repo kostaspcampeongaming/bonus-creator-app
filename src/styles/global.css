@@ -1,0 +1,42 @@
+body {
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+
+button {
+  background-color: var(--accent);
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+
+input, textarea {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}

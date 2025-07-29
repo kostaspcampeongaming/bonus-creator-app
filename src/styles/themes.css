@@ -1,0 +1,26 @@
+:root {
+  --primary-color: #0a0f1a;
+  --accent-color: #fbc900;
+  --text-color: #ffffff;
+  --bg-color: #0a0f1a;
+
+  --font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
