@@ -1,11 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormField } from '../components/FormField';
-import { FormSection } from '../components/FormSection';
-const formData = {
-  // other fields
-  formType: 'liveCasino',
-};
 
 const currencies = ['EUR', 'USD', 'CAD', 'AUD', 'BRL', 'NOK', 'GBP', 'NZD', 'CHF', 'MXN', 'PLN', 'PEN', 'CLP', 'ZAR', 'JPY'];
 
@@ -28,38 +23,31 @@ const DepositLiveCasinoForm = ({ bonusType }: { bonusType: string }) => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* General Info */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Name (ID)</label>
+        <FormField label="Bonus Name (ID)">
           <input {...register('name')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>From (dd-mm-yyyy hh:mm)</label>
+        </FormField>
+        <FormField label="From (dd-mm-yyyy hh:mm)">
           <input {...register('from')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>To (dd-mm-yyyy hh:mm)</label>
+        </FormField>
+        <FormField label="To (dd-mm-yyyy hh:mm)">
           <input {...register('to')} />
-        </div>
+        </FormField>
       </div>
 
       {/* Trigger Info */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Trigger Name (EN)</label>
+        <FormField label="Trigger Name (EN)">
           <input {...register('triggerName')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Description (EN)</label>
+        </FormField>
+        <FormField label="Trigger Description (EN)">
           <input {...register('triggerDescription')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Iterations</label>
-          <input type="number" {...register('iterations')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Segments (comma-separated)</label>
+        </FormField>
+        <FormField label="Iterations">
+          <input type="number" {...register('iterations', { valueAsNumber: true })} required />
+        </FormField>
+        <FormField label="Segments (comma-separated)">
           <input {...register('segments')} required />
-        </div>
+        </FormField>
       </div>
 
       {/* Minimum Amounts */}
@@ -67,10 +55,13 @@ const DepositLiveCasinoForm = ({ bonusType }: { bonusType: string }) => {
         <legend><strong>Minimum Deposit Amounts</strong></legend>
         <div style={sectionStyle}>
           {currencies.map((cur) => (
-            <div style={fieldStyle} key={cur}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`minimumAmount.${cur}`)} />
-            </div>
+            <FormField key={`min-${cur}`} label={cur}>
+              <input
+                type="number"
+                step="any"
+                {...register(`minimumAmount.${cur}`, { valueAsNumber: true })}
+              />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -80,28 +71,28 @@ const DepositLiveCasinoForm = ({ bonusType }: { bonusType: string }) => {
         <legend><strong>Maximum Bonus Amounts</strong></legend>
         <div style={sectionStyle}>
           {currencies.map((cur) => (
-            <div style={fieldStyle} key={cur}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumAmount.${cur}`)} />
-            </div>
+            <FormField key={`max-${cur}`} label={cur}>
+              <input
+                type="number"
+                step="any"
+                {...register(`maximumAmount.${cur}`, { valueAsNumber: true })}
+              />
+            </FormField>
           ))}
         </div>
       </fieldset>
 
       {/* Core Config */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Percentage</label>
-          <input type="number" {...register('percentage')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Wagering Multiplier</label>
-          <input type="number" {...register('wageringMultiplier')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Expiry (e.g. 3d)</label>
+        <FormField label="Bonus Percentage">
+          <input type="number" {...register('percentage', { valueAsNumber: true })} required />
+        </FormField>
+        <FormField label="Wagering Multiplier">
+          <input type="number" {...register('wageringMultiplier', { valueAsNumber: true })} required />
+        </FormField>
+        <FormField label="Expiry (e.g. 3d)">
           <input {...register('expiry')} required />
-        </div>
+        </FormField>
       </div>
 
       {/* Boolean Toggles */}
@@ -126,10 +117,9 @@ const DepositLiveCasinoForm = ({ bonusType }: { bonusType: string }) => {
 
       {/* Misc */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Category</label>
+        <FormField label="Bonus Category">
           <input {...register('category')} placeholder="games" required />
-        </div>
+        </FormField>
       </div>
 
       {/* Maximum Withdraw */}
@@ -137,10 +127,13 @@ const DepositLiveCasinoForm = ({ bonusType }: { bonusType: string }) => {
         <legend><strong>Maximum Withdraw Amounts</strong></legend>
         <div style={sectionStyle}>
           {currencies.map((cur) => (
-            <div style={fieldStyle} key={cur}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumWithdraw.${cur}`)} />
-            </div>
+            <FormField key={`withdraw-${cur}`} label={cur}>
+              <input
+                type="number"
+                step="any"
+                {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })}
+              />
+            </FormField>
           ))}
         </div>
       </fieldset>

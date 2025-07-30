@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormField } from '../components/FormField';
-import { FormSection } from '../components/FormSection';
 
 const currencies = ['EUR', 'USD', 'CAD', 'AUD', 'BRL', 'NOK', 'GBP', 'NZD', 'CHF', 'MXN', 'PLN', 'PEN', 'CLP', 'ZAR', 'JPY'];
 
@@ -24,22 +23,18 @@ const ExternalCreditForm = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* General Info */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Name (ID)</label>
+        <FormField label="Bonus Name (ID)">
           <input {...register('name')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Name</label>
+        </FormField>
+        <FormField label="Trigger Name">
           <input {...register('triggerName')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Duration (e.g. 2d)</label>
+        </FormField>
+        <FormField label="Trigger Duration (e.g. 2d)">
           <input {...register('duration')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Expiry (e.g. 2d)</label>
+        </FormField>
+        <FormField label="Expiry (e.g. 2d)">
           <input {...register('expiry')} required />
-        </div>
+        </FormField>
       </div>
 
       {/* Cost Per Currency */}
@@ -47,10 +42,9 @@ const ExternalCreditForm = () => {
         <legend><strong>Cost Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`cost-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`cost.${cur}`)} />
-            </div>
+            <FormField key={`cost-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`cost.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -60,10 +54,9 @@ const ExternalCreditForm = () => {
         <legend><strong>Multiplier Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`multiplier-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`multiplier.${cur}`)} />
-            </div>
+            <FormField key={`multiplier-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`multiplier.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -73,10 +66,9 @@ const ExternalCreditForm = () => {
         <legend><strong>Maximum Bets Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`maximumBets-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumBets.${cur}`)} />
-            </div>
+            <FormField key={`maximumBets-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`maximumBets.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -86,45 +78,39 @@ const ExternalCreditForm = () => {
         <legend><strong>Maximum Withdraw Cap Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`maximumWithdraw.${cur}.cap`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumWithdraw.${cur}.cap`)} />
-            </div>
+            <FormField key={`maximumWithdraw.${cur}.cap`} label={cur}>
+              <input type="number" step="any" {...register(`maximumWithdraw.${cur}.cap`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
 
       {/* Additional Config */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Provider</label>
+        <FormField label="Provider">
           <input {...register('provider')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Brand</label>
+        </FormField>
+        <FormField label="Brand">
           <input {...register('brand')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Category</label>
+        </FormField>
+        <FormField label="Category">
           <input {...register('category')} placeholder="games" />
-        </div>
-        <div style={fieldStyle}>
-          <label>Bonus Type</label>
+        </FormField>
+        <FormField label="Bonus Type">
           <input {...register('bonusType')} defaultValue="free_bet" readOnly />
-        </div>
+        </FormField>
       </div>
 
       {/* Games */}
       <fieldset>
         <legend><strong>Games</strong></legend>
-        <div style={fieldStyle}>
-          <label>Game Names (comma-separated)</label>
+        <FormField label="Game Names (comma-separated)">
           <textarea {...register('games')} rows={3} placeholder="Safari Sam 2" />
-        </div>
+        </FormField>
       </fieldset>
 
       {/* Withdraw Active */}
-      <label>
+      <label style={{ marginTop: '1rem' }}>
         <input type="checkbox" {...register('withdrawActive')} />
         &nbsp; Withdraw Active
       </label>

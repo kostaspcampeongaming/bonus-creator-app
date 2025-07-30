@@ -1,8 +1,14 @@
+import { cleanCurrencyMap } from './cleanCurrencyMap';
 import { getBonusProportions } from '../data/gameProportions';
 
 export function buildBonusJson(formData: any) {
   // ✅ External Bonus
   if (formData.type === 'external') {
+    console.log('🔍 [External] RAW cost:', formData.cost);
+    console.log('🔍 [External] RAW multiplier:', formData.multiplier);
+    console.log('🔍 [External] RAW maximumBets:', formData.maximumBets);
+    console.log('🔍 [External] RAW maximumWithdraw:', formData.maximumWithdraw);
+
     return {
       id: formData.name,
       trigger: {
@@ -13,15 +19,15 @@ export function buildBonusJson(formData: any) {
         },
       },
       config: {
-        cost: formData.cost || {},
-        multiplier: formData.multiplier || {},
-        maximumBets: formData.maximumBets || {},
+        cost: cleanCurrencyMap(formData.cost),
+        multiplier: cleanCurrencyMap(formData.multiplier),
+        maximumBets: cleanCurrencyMap(formData.maximumBets),
         provider: formData.provider || '',
         brand: formData.brand || '',
         type: 'free_bet',
-        withdrawActive: formData.withdrawActive || false,
+        withdrawActive: !!formData.withdrawActive,
         category: formData.category || 'games',
-        maximumWithdraw: formData.maximumWithdraw || {},
+        maximumWithdraw: cleanCurrencyMap(formData.maximumWithdraw),
         expiry: formData.expiry || '2d',
         extra: {
           games: formData.games
@@ -35,6 +41,11 @@ export function buildBonusJson(formData: any) {
 
   // ✅ Manual Bonus
   if (formData.type === 'manual') {
+    console.log('🔍 [Manual] RAW cost:', formData.cost);
+    console.log('🔍 [Manual] RAW multiplier:', formData.multiplier);
+    console.log('🔍 [Manual] RAW maximumBets:', formData.maximumBets);
+    console.log('🔍 [Manual] RAW maximumWithdraw:', formData.maximumWithdraw);
+
     return {
       id: formData.name,
       trigger: {
@@ -44,15 +55,15 @@ export function buildBonusJson(formData: any) {
         },
       },
       config: {
-        cost: formData.cost || {},
-        multiplier: formData.multiplier || {},
-        maximumBets: formData.maximumBets || {},
+        cost: cleanCurrencyMap(formData.cost),
+        multiplier: cleanCurrencyMap(formData.multiplier),
+        maximumBets: cleanCurrencyMap(formData.maximumBets),
         provider: formData.provider || '',
         brand: formData.brand || '',
         type: 'free_bet',
-        withdrawActive: formData.withdrawActive || false,
+        withdrawActive: !!formData.withdrawActive,
         category: formData.category || 'games',
-        maximumWithdraw: formData.maximumWithdraw || {},
+        maximumWithdraw: cleanCurrencyMap(formData.maximumWithdraw),
         expiry: formData.expiry || '2d',
         extra: {
           games: formData.games
@@ -66,6 +77,12 @@ export function buildBonusJson(formData: any) {
 
   // ✅ Open (FS Package) Bonus
   if (formData.type === 'open') {
+    console.log('🔍 [Open] RAW cost:', formData.cost);
+    console.log('🔍 [Open] RAW multiplier:', formData.multiplier);
+    console.log('🔍 [Open] RAW maximumBets:', formData.maximumBets);
+    console.log('🔍 [Open] RAW minimumAmount:', formData.minimumAmount);
+    console.log('🔍 [Open] RAW maximumWithdraw:', formData.maximumWithdraw);
+
     return {
       id: formData.name,
       trigger: {
@@ -77,18 +94,18 @@ export function buildBonusJson(formData: any) {
         ids: formData.triggerIds
           ? formData.triggerIds.split(',').map((id: string) => id.trim()).filter(Boolean)
           : [],
-        minimumAmount: formData.minimumAmount || {},
+        minimumAmount: cleanCurrencyMap(formData.minimumAmount),
       },
       config: {
-        cost: formData.cost || {},
-        multiplier: formData.multiplier || {},
-        maximumBets: formData.maximumBets || {},
+        cost: cleanCurrencyMap(formData.cost),
+        multiplier: cleanCurrencyMap(formData.multiplier),
+        maximumBets: cleanCurrencyMap(formData.maximumBets),
         provider: formData.provider || '',
         brand: formData.brand || '',
         type: 'free_bet',
-        withdrawActive: formData.withdrawActive || false,
+        withdrawActive: !!formData.withdrawActive,
         category: formData.category || 'games',
-        maximumWithdraw: formData.maximumWithdraw || {},
+        maximumWithdraw: cleanCurrencyMap(formData.maximumWithdraw),
         expiry: formData.expiry || '2d',
         extra: {
           games: formData.games
@@ -100,10 +117,14 @@ export function buildBonusJson(formData: any) {
     };
   }
 
-  // ✅ Deposit Bonus
+  // ✅ Deposit Bonus (Casino or Live)
   if (formData.type !== 'deposit') {
     throw new Error('Unsupported bonus type');
   }
+
+  console.log('🔍 [Deposit] RAW minimumAmount:', formData.minimumAmount);
+  console.log('🔍 [Deposit] RAW maximumAmount:', formData.maximumAmount);
+  console.log('🔍 [Deposit] RAW maximumWithdraw:', formData.maximumWithdraw);
 
   return {
     id: formData.name,
@@ -120,23 +141,23 @@ export function buildBonusJson(formData: any) {
         en: formData.triggerDescription,
       },
       type: 'deposit',
-      minimumAmount: formData.minimumAmount || {},
-      iterations: formData.iterations || 1,
+      minimumAmount: cleanCurrencyMap(formData.minimumAmount),
+      iterations: Number(formData.iterations) || 1,
       segments: formData.segments
         ? formData.segments.split(',').map((s: string) => s.trim()).filter(Boolean)
         : [],
     },
     config: {
-      compensateOverspending: formData.compensateOverspending || false,
-      maximumAmount: formData.maximumAmount || {},
-      percentage: formData.percentage,
-      wageringMultiplier: formData.wageringMultiplier,
-      includeAmountOnTargetWagerCalculation: formData.includeAmountOnTargetWagerCalculation || false,
-      capCalculationAmountToMaximumBonus: formData.capCalculationAmountToMaximumBonus || false,
+      compensateOverspending: !!formData.compensateOverspending,
+      maximumAmount: cleanCurrencyMap(formData.maximumAmount),
+      percentage: Number(formData.percentage),
+      wageringMultiplier: Number(formData.wageringMultiplier),
+      includeAmountOnTargetWagerCalculation: !!formData.includeAmountOnTargetWagerCalculation,
+      capCalculationAmountToMaximumBonus: !!formData.capCalculationAmountToMaximumBonus,
       type: 'cash',
-      withdrawActive: formData.withdrawActive || false,
+      withdrawActive: !!formData.withdrawActive,
       category: formData.category || 'games',
-      maximumWithdraw: formData.maximumWithdraw || {},
+      maximumWithdraw: cleanCurrencyMap(formData.maximumWithdraw),
       expiry: formData.expiry || '30d',
       extra: {
         proportions: getBonusProportions(formData.formType),

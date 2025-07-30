@@ -45,7 +45,11 @@ const ManualForm = () => {
           {currencies.map((cur) => (
             <div style={fieldStyle} key={`cost-${cur}`}>
               <label>{cur}</label>
-              <input type="number" step="any" {...register(`cost.${cur}`)} />
+              <input
+                type="number"
+                step="any"
+                {...register(`cost.${cur}`, { valueAsNumber: true })}
+              />
             </div>
           ))}
         </div>
@@ -58,7 +62,11 @@ const ManualForm = () => {
           {currencies.map((cur) => (
             <div style={fieldStyle} key={`multiplier-${cur}`}>
               <label>{cur}</label>
-              <input type="number" step="any" {...register(`multiplier.${cur}`)} />
+              <input
+                type="number"
+                step="any"
+                {...register(`multiplier.${cur}`, { valueAsNumber: true })}
+              />
             </div>
           ))}
         </div>
@@ -71,7 +79,11 @@ const ManualForm = () => {
           {currencies.map((cur) => (
             <div style={fieldStyle} key={`maximumBets-${cur}`}>
               <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumBets.${cur}`)} />
+              <input
+                type="number"
+                step="any"
+                {...register(`maximumBets.${cur}`, { valueAsNumber: true })}
+              />
             </div>
           ))}
         </div>
@@ -119,7 +131,11 @@ const ManualForm = () => {
           {currencies.map((cur) => (
             <div style={fieldStyle} key={`maximumWithdraw-${cur}`}>
               <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumWithdraw.${cur}`)} />
+              <input
+                type="number"
+                step="any"
+                {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })}
+              />
             </div>
           ))}
         </div>

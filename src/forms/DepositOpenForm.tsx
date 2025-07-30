@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormField } from '../components/FormField';
-import { FormSection } from '../components/FormSection';
 
 const currencies = ['EUR', 'USD', 'CAD', 'AUD', 'BRL', 'NOK', 'GBP', 'NZD', 'CHF', 'MXN', 'PLN', 'PEN', 'CLP', 'ZAR', 'JPY'];
 
@@ -24,31 +23,26 @@ const DepositOpenForm = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* General Info */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Name (ID)</label>
+        <FormField label="Bonus Name (ID)">
           <input {...register('name')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Name</label>
+        </FormField>
+        <FormField label="Trigger Name">
           <input {...register('triggerName')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Duration</label>
+        </FormField>
+        <FormField label="Trigger Duration">
           <input {...register('duration')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Expiry</label>
+        </FormField>
+        <FormField label="Expiry">
           <input {...register('expiry')} required />
-        </div>
+        </FormField>
       </div>
 
       {/* Trigger IDs */}
       <fieldset>
         <legend><strong>Trigger IDs</strong></legend>
-        <div style={fieldStyle}>
-          <label>Enter comma-separated bonus trigger IDs</label>
+        <FormField label="Enter comma-separated bonus trigger IDs">
           <textarea {...register('triggerIds')} rows={3} placeholder="Welcome Casino Package 1st Deposit FI, ..." />
-        </div>
+        </FormField>
       </fieldset>
 
       {/* Minimum Deposit Per Currency */}
@@ -56,10 +50,9 @@ const DepositOpenForm = () => {
         <legend><strong>Minimum Deposit Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`min-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`minimumAmount.${cur}`)} />
-            </div>
+            <FormField key={`min-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`minimumAmount.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -69,10 +62,9 @@ const DepositOpenForm = () => {
         <legend><strong>Cost Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`cost-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`cost.${cur}`)} />
-            </div>
+            <FormField key={`cost-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`cost.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -82,10 +74,9 @@ const DepositOpenForm = () => {
         <legend><strong>Multiplier Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`multiplier-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`multiplier.${cur}`)} />
-            </div>
+            <FormField key={`multiplier-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`multiplier.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -95,10 +86,9 @@ const DepositOpenForm = () => {
         <legend><strong>Maximum Bets Per Currency</strong></legend>
         <div style={sectionStyle}>
           {currencies.map(cur => (
-            <div style={fieldStyle} key={`maximumBets-${cur}`}>
-              <label>{cur}</label>
-              <input type="number" step="any" {...register(`maximumBets.${cur}`)} />
-            </div>
+            <FormField key={`maximumBets-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`maximumBets.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -109,10 +99,12 @@ const DepositOpenForm = () => {
         <div style={sectionStyle}>
           {currencies.map(cur => (
             <div key={`maximumWithdraw-${cur}`} style={fieldStyle}>
-              <label>{cur} Cap</label>
-              <input type="number" step="any" {...register(`maximumWithdraw.${cur}.cap`)} />
-              <label>{cur} Multiplier</label>
-              <input type="number" step="any" {...register(`maximumWithdraw.${cur}.multiplier`)} />
+              <FormField label={`${cur} Cap`}>
+                <input type="number" step="any" {...register(`maximumWithdraw.${cur}.cap`, { valueAsNumber: true })} />
+              </FormField>
+              <FormField label={`${cur} Multiplier`}>
+                <input type="number" step="any" {...register(`maximumWithdraw.${cur}.multiplier`, { valueAsNumber: true })} />
+              </FormField>
             </div>
           ))}
         </div>
@@ -120,31 +112,26 @@ const DepositOpenForm = () => {
 
       {/* Config Fields */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Provider</label>
+        <FormField label="Provider">
           <input {...register('provider')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Brand</label>
+        </FormField>
+        <FormField label="Brand">
           <input {...register('brand')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Category</label>
+        </FormField>
+        <FormField label="Category">
           <input {...register('category')} placeholder="games" />
-        </div>
-        <div style={fieldStyle}>
-          <label>Bonus Type</label>
+        </FormField>
+        <FormField label="Bonus Type">
           <input {...register('bonusType')} defaultValue="free_bet" readOnly />
-        </div>
+        </FormField>
       </div>
 
       {/* Games */}
       <fieldset>
         <legend><strong>Games</strong></legend>
-        <div style={fieldStyle}>
-          <label>Game Names (comma-separated)</label>
+        <FormField label="Game Names (comma-separated)">
           <textarea {...register('games')} rows={3} placeholder="Big Bass Splash, ..." />
-        </div>
+        </FormField>
       </fieldset>
 
       {/* Withdraw Toggle */}
