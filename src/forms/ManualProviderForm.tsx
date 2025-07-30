@@ -150,7 +150,7 @@ const ManualProviderForm = () => {
       </FormField>
 
       {/* Selectors Input */}
-      <FormField label="Selectors (comma-separated)">
+      <FormField label="Selectors (comma-separated, input at least one to enable proportions)">
         <input {...register('selectors')} placeholder="e.g. NOLIMIT,PRAGMATIC" />
       </FormField>
 
