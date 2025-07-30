@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/bonus-creator-app/static/css/main.3490e277.css",
-    "main.js": "/bonus-creator-app/static/js/main.93ee7540.js",
+    "main.js": "/bonus-creator-app/static/js/main.81e41302.js",
     "static/js/453.32b386c8.chunk.js": "/bonus-creator-app/static/js/453.32b386c8.chunk.js",
     "index.html": "/bonus-creator-app/index.html",
     "main.3490e277.css.map": "/bonus-creator-app/static/css/main.3490e277.css.map",
-    "main.93ee7540.js.map": "/bonus-creator-app/static/js/main.93ee7540.js.map",
+    "main.81e41302.js.map": "/bonus-creator-app/static/js/main.81e41302.js.map",
     "453.32b386c8.chunk.js.map": "/bonus-creator-app/static/js/453.32b386c8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3490e277.css",
-    "static/js/main.93ee7540.js"
+    "static/js/main.81e41302.js"
   ]
 }
