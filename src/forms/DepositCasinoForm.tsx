@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormField } from '../components/FormField';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
 
 const currencies = ['EUR', 'USD', 'CAD', 'AUD', 'BRL', 'NOK', 'GBP', 'NZD', 'CHF', 'MXN', 'PLN', 'PEN', 'CLP', 'ZAR', 'JPY'];
-
-const fieldStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.25rem',
-};
 
 const sectionStyle: React.CSSProperties = {
   display: 'grid',
@@ -17,7 +14,20 @@ const sectionStyle: React.CSSProperties = {
 };
 
 const DepositCasinoForm = ({ bonusType }: { bonusType: string }) => {
-  const { register } = useFormContext();
+  const { register, setValue } = useFormContext();
+
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+
+  const handleFromChange = (date: Date | null) => {
+    setFromDate(date);
+    if (date) setValue('from', format(date, 'dd-MM-yyyy HH:mm'));
+  };
+
+  const handleToChange = (date: Date | null) => {
+    setToDate(date);
+    if (date) setValue('to', format(date, 'dd-MM-yyyy HH:mm'));
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -26,11 +36,37 @@ const DepositCasinoForm = ({ bonusType }: { bonusType: string }) => {
         <FormField label="Bonus Name (ID)">
           <input {...register('name')} required />
         </FormField>
-        <FormField label="From (dd-mm-yyyy hh:mm)">
-          <input {...register('from')} />
+
+        <FormField label="From (date & time)">
+          <>
+            <input type="hidden" {...register('from')} />
+            <DatePicker
+              selected={fromDate}
+              onChange={handleFromChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="dd-MM-yyyy HH:mm"
+              timeCaption="Time"
+              placeholderText="Select start date & time"
+            />
+          </>
         </FormField>
-        <FormField label="To (dd-mm-yyyy hh:mm)">
-          <input {...register('to')} />
+
+        <FormField label="To (date & time)">
+          <>
+            <input type="hidden" {...register('to')} />
+            <DatePicker
+              selected={toDate}
+              onChange={handleToChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="dd-MM-yyyy HH:mm"
+              timeCaption="Time"
+              placeholderText="Select end date & time"
+            />
+          </>
         </FormField>
       </div>
 
@@ -54,13 +90,9 @@ const DepositCasinoForm = ({ bonusType }: { bonusType: string }) => {
       <fieldset>
         <legend><strong>Minimum Deposit Amounts</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
+          {currencies.map(cur => (
             <FormField key={`min-${cur}`} label={cur}>
-              <input
-                type="number"
-                step="any"
-                {...register(`minimumAmount.${cur}`, { valueAsNumber: true })}
-              />
+              <input type="number" step="any" {...register(`minimumAmount.${cur}`, { valueAsNumber: true })} />
             </FormField>
           ))}
         </div>
@@ -70,13 +102,9 @@ const DepositCasinoForm = ({ bonusType }: { bonusType: string }) => {
       <fieldset>
         <legend><strong>Maximum Bonus Amounts</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
+          {currencies.map(cur => (
             <FormField key={`max-${cur}`} label={cur}>
-              <input
-                type="number"
-                step="any"
-                {...register(`maximumAmount.${cur}`, { valueAsNumber: true })}
-              />
+              <input type="number" step="any" {...register(`maximumAmount.${cur}`, { valueAsNumber: true })} />
             </FormField>
           ))}
         </div>
@@ -126,13 +154,9 @@ const DepositCasinoForm = ({ bonusType }: { bonusType: string }) => {
       <fieldset>
         <legend><strong>Maximum Withdraw Amounts</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
+          {currencies.map(cur => (
             <FormField key={`withdraw-${cur}`} label={cur}>
-              <input
-                type="number"
-                step="any"
-                {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })}
-              />
+              <input type="number" step="any" {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })} />
             </FormField>
           ))}
         </div>

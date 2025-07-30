@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormField } from '../components/FormField';
-import { FormSection } from '../components/FormSection';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
 
 const currencies = ['EUR', 'USD', 'CAD', 'AUD', 'BRL', 'NOK', 'GBP', 'NZD', 'CHF', 'MXN', 'PLN', 'PEN', 'CLP', 'ZAR', 'JPY'];
 
@@ -18,39 +20,74 @@ const sectionStyle: React.CSSProperties = {
 };
 
 const ManualForm = () => {
-  const { register } = useFormContext();
+  const { register, setValue } = useFormContext();
+
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+
+  const handleFromChange = (date: Date | null) => {
+    setFromDate(date);
+    if (date) setValue('from', format(date, 'dd-MM-yyyy HH:mm'));
+  };
+
+  const handleToChange = (date: Date | null) => {
+    setToDate(date);
+    if (date) setValue('to', format(date, 'dd-MM-yyyy HH:mm'));
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* General Info */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Bonus Name (ID)</label>
+        <FormField label="Bonus Name (ID)">
           <input {...register('name')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Trigger Name</label>
+        </FormField>
+        <FormField label="From (date & time)">
+          <>
+            <input type="hidden" {...register('from')} />
+            <DatePicker
+              selected={fromDate}
+              onChange={handleFromChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="dd-MM-yyyy HH:mm"
+              timeCaption="Time"
+              placeholderText="Select start date & time"
+            />
+          </>
+        </FormField>
+        <FormField label="To (date & time)">
+          <>
+            <input type="hidden" {...register('to')} />
+            <DatePicker
+              selected={toDate}
+              onChange={handleToChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="dd-MM-yyyy HH:mm"
+              timeCaption="Time"
+              placeholderText="Select end date & time"
+            />
+          </>
+        </FormField>
+        <FormField label="Trigger Name">
           <input {...register('triggerName')} required />
-        </div>
-        <div style={fieldStyle}>
-          <label>Expiry (e.g. 2d)</label>
+        </FormField>
+        <FormField label="Expiry (e.g. 2d)">
           <input {...register('expiry')} required />
-        </div>
+        </FormField>
       </div>
 
       {/* Cost per currency */}
       <fieldset>
         <legend><strong>Cost Per Currency</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
-            <div style={fieldStyle} key={`cost-${cur}`}>
-              <label>{cur}</label>
-              <input
-                type="number"
-                step="any"
-                {...register(`cost.${cur}`, { valueAsNumber: true })}
-              />
-            </div>
+          {currencies.map(cur => (
+            <FormField key={`cost-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`cost.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -59,15 +96,10 @@ const ManualForm = () => {
       <fieldset>
         <legend><strong>Multiplier Per Currency</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
-            <div style={fieldStyle} key={`multiplier-${cur}`}>
-              <label>{cur}</label>
-              <input
-                type="number"
-                step="any"
-                {...register(`multiplier.${cur}`, { valueAsNumber: true })}
-              />
-            </div>
+          {currencies.map(cur => (
+            <FormField key={`multiplier-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`multiplier.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
@@ -76,46 +108,36 @@ const ManualForm = () => {
       <fieldset>
         <legend><strong>Maximum Bets Per Currency</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
-            <div style={fieldStyle} key={`maximumBets-${cur}`}>
-              <label>{cur}</label>
-              <input
-                type="number"
-                step="any"
-                {...register(`maximumBets.${cur}`, { valueAsNumber: true })}
-              />
-            </div>
+          {currencies.map(cur => (
+            <FormField key={`maximumBets-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`maximumBets.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>
 
       {/* Config Fields */}
       <div style={sectionStyle}>
-        <div style={fieldStyle}>
-          <label>Provider</label>
+        <FormField label="Provider">
           <input {...register('provider')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Brand</label>
+        </FormField>
+        <FormField label="Brand">
           <input {...register('brand')} />
-        </div>
-        <div style={fieldStyle}>
-          <label>Category</label>
+        </FormField>
+        <FormField label="Category">
           <input {...register('category')} placeholder="games" />
-        </div>
-        <div style={fieldStyle}>
-          <label>Bonus Type</label>
+        </FormField>
+        <FormField label="Bonus Type">
           <input {...register('bonusType')} defaultValue="free_bet" readOnly />
-        </div>
+        </FormField>
       </div>
 
       {/* Games */}
       <fieldset>
         <legend><strong>Games</strong></legend>
-        <div style={fieldStyle}>
-          <label>Game Names (comma-separated)</label>
+        <FormField label="Game Names (comma-separated)">
           <textarea {...register('games')} rows={3} placeholder="The Dog House Megaways, Gates of Olympus" />
-        </div>
+        </FormField>
       </fieldset>
 
       {/* Toggles */}
@@ -128,15 +150,10 @@ const ManualForm = () => {
       <fieldset>
         <legend><strong>Maximum Withdraw Amounts</strong></legend>
         <div style={sectionStyle}>
-          {currencies.map((cur) => (
-            <div style={fieldStyle} key={`maximumWithdraw-${cur}`}>
-              <label>{cur}</label>
-              <input
-                type="number"
-                step="any"
-                {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })}
-              />
-            </div>
+          {currencies.map(cur => (
+            <FormField key={`maximumWithdraw-${cur}`} label={cur}>
+              <input type="number" step="any" {...register(`maximumWithdraw.${cur}`, { valueAsNumber: true })} />
+            </FormField>
           ))}
         </div>
       </fieldset>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+
 import DepositCasinoForm from './forms/DepositCasinoForm';
 import DepositLiveCasinoForm from './forms/DepositLiveCasinoForm';
 import DepositOpenForm from './forms/DepositOpenForm';
 import ExternalCreditForm from './forms/ExternalCreditForm';
 import ManualForm from './forms/ManualForm';
+import CloseBonusForm from './forms/CloseBonusForm';
+
 import { buildBonusJson } from './utils/buildJson';
 
 const formTabs = [
@@ -12,35 +15,34 @@ const formTabs = [
   { label: 'Deposit Live Casino', key: 'deposit_live_casino', type: 'deposit' },
   { label: 'Deposit Open (FS Package)', key: 'deposit_open', type: 'open' },
   { label: 'External (Bonus Credit)', key: 'external_credit', type: 'external' },
-  { label: 'Manual', key: 'manual', type: 'manual' }
+  { label: 'Manual', key: 'manual', type: 'manual' },
+  { label: 'Close (FS Winnings)', key: 'close_bonus', type: 'close' }, // ✅ NEW
 ] as const;
 
 type FormKey = typeof formTabs[number]['key'];
 
 function App() {
   const [activeForm, setActiveForm] = useState<FormKey>('deposit_casino');
-
   const methods = useForm();
   const { handleSubmit } = methods;
 
   const activeTab = formTabs.find(tab => tab.key === activeForm)!;
 
   const onSubmit = (data: any) => {
-  const formType =
-    activeForm === 'deposit_casino' ? 'casino'
-    : activeForm === 'deposit_live_casino' ? 'liveCasino'
-    : undefined;
+    const formType =
+      activeForm === 'deposit_casino' ? 'casino'
+      : activeForm === 'deposit_live_casino' ? 'liveCasino'
+      : undefined; // other types don’t need formType
 
-  const finalJson = buildBonusJson({
-    ...data,
-    type: activeTab.type,
-    formType, // ✅ pass this along
-  });
+    const finalJson = buildBonusJson({
+      ...data,
+      type: activeTab.type,
+      formType,
+    });
 
-  console.log('Generated JSON:', finalJson);
-  downloadJson(finalJson);
-};
-
+    console.log('Generated JSON:', finalJson);
+    downloadJson(finalJson);
+  };
 
   const renderActiveForm = () => {
     const props = { bonusType: activeTab.type };
@@ -55,33 +57,32 @@ function App() {
         return <ExternalCreditForm />;
       case 'manual':
         return <ManualForm />;
+      case 'close_bonus':
+        return <CloseBonusForm />;
       default:
         return null;
     }
   };
 
   return (
-<div style={{
-  fontFamily: 'var(--font-family)',
-  padding: '2rem',
-  maxWidth: 1200,
-  margin: '0 auto',
-  backgroundColor: 'var(--bg-color)',
-  color: 'var(--text-color)'
-}}>
-  <img
-  src={`${process.env.PUBLIC_URL}/logo.png`}
-  alt="Campeón Gaming"
-  style={{
-    display: 'block',
-    margin: '0 auto 1rem',
-    maxHeight: 50,
-  }}
-/>
-
-
-  <h1 style={{ color: 'var(--accent-color)', textAlign: 'center' }}>🎁 Bonus Creator</h1>
-
+    <div style={{
+      fontFamily: 'var(--font-family)',
+      padding: '2rem',
+      maxWidth: 1200,
+      margin: '0 auto',
+      backgroundColor: 'var(--bg-color)',
+      color: 'var(--text-color)',
+    }}>
+      <img
+        src={`${process.env.PUBLIC_URL}/logo.png`}
+        alt="Campeón Gaming"
+        style={{
+          display: 'block',
+          margin: '0 auto 1rem',
+          maxHeight: 50,
+        }}
+      />
+      <h1 style={{ color: 'var(--accent-color)', textAlign: 'center' }}>🎁 Bonus Creator</h1>
 
       {/* Tab Navigation */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
@@ -110,12 +111,18 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <button
               type="submit"
-              style={{ padding: '0.8rem 1.5rem', fontSize: '1rem', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: 5 }}
+              style={{
+                padding: '0.8rem 1.5rem',
+                fontSize: '1rem',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: 5,
+              }}
             >
               Export ➡️
             </button>
           </div>
-          
         </form>
       </FormProvider>
     </div>
