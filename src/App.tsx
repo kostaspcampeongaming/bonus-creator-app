@@ -70,7 +70,7 @@ function App() {
   color: 'var(--text-color)'
 }}>
   <img
-  src="/logo.png"
+  src={`${process.env.PUBLIC_URL}/logo.png`}
   alt="Campeón Gaming"
   style={{
     display: 'block',
