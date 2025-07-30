@@ -6,6 +6,7 @@ import DepositLiveCasinoForm from './forms/DepositLiveCasinoForm';
 import DepositOpenForm from './forms/DepositOpenForm';
 import ExternalCreditForm from './forms/ExternalCreditForm';
 import ManualForm from './forms/ManualForm';
+import ManualProviderForm from './forms/ManualProviderForm'; // ✅ New import
 import CloseBonusForm from './forms/CloseBonusForm';
 
 import { buildBonusJson } from './utils/buildJson';
@@ -16,7 +17,8 @@ const formTabs = [
   { label: 'Deposit Open (FS Package)', key: 'deposit_open', type: 'open' },
   { label: 'External (Bonus Credit)', key: 'external_credit', type: 'external' },
   { label: 'Manual', key: 'manual', type: 'manual' },
-  { label: 'Close (FS Winnings)', key: 'close_bonus', type: 'close' }, // ✅ NEW
+  { label: 'Close (FS Winnings)', key: 'close_bonus', type: 'close' },
+  { label: 'Manual (Provider)', key: 'manual_provider', type: 'manual_provider' }, // ✅ Use separate type
 ] as const;
 
 type FormKey = typeof formTabs[number]['key'];
@@ -32,7 +34,7 @@ function App() {
     const formType =
       activeForm === 'deposit_casino' ? 'casino'
       : activeForm === 'deposit_live_casino' ? 'liveCasino'
-      : undefined; // other types don’t need formType
+      : undefined;
 
     const finalJson = buildBonusJson({
       ...data,
@@ -46,6 +48,7 @@ function App() {
 
   const renderActiveForm = () => {
     const props = { bonusType: activeTab.type };
+
     switch (activeForm) {
       case 'deposit_casino':
         return <DepositCasinoForm {...props} />;
@@ -57,6 +60,8 @@ function App() {
         return <ExternalCreditForm />;
       case 'manual':
         return <ManualForm />;
+      case 'manual_provider':
+        return <ManualProviderForm />; // ✅ Corrected route
       case 'close_bonus':
         return <CloseBonusForm />;
       default:

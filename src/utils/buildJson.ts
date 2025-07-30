@@ -137,6 +137,43 @@ if (formData.type === 'close') {
   };
 }
 
+// ✅ Manual (Provider) Bonus
+if (formData.type === 'manual_provider') {
+  return {
+    id: formData.name,
+    schedule: {
+      type: 'period',
+      from: formData.from,
+      to: formData.to,
+    },
+    trigger: {
+      type: 'manual',
+      name: { '*': formData.triggerName },
+      minimumStakeToWager: cleanCurrencyMap(formData.minimumStakeToWager),
+      maximumStakeToWager: cleanCurrencyMap(formData.maximumStakeToWager),
+    },
+    config: {
+      maximumAmount: cleanCurrencyMap(formData.maximumAmount),
+      percentage: Number(formData.percentage),
+      wageringMultiplier: Number(formData.wageringMultiplier),
+      capCalculationAmountToMaximumBonus: !!formData.capCalculationAmountToMaximumBonus,
+      includeAmountOnTargetWagerCalculation: !!formData.includeAmountOnTargetWagerCalculation,
+      compensateOverspending: !!formData.compensateOverspending,
+      type: 'cash',
+      withdrawActive: !!formData.withdrawActive,
+      category: formData.category || 'games',
+      maximumWithdraw: cleanCurrencyMap(formData.maximumWithdraw),
+      expiry: formData.expiry || '30d',
+      extra: {
+        selectors: formData.selectors
+          ? formData.selectors.split(',').map((s: string) => s.trim()).filter(Boolean)
+          : [],
+        proportions: formData.extra?.proportions || {},
+      },
+    },
+    type: 'bonus_template',
+  };
+}
 
   // ✅ Deposit Bonus (Casino or Live)
   if (formData.type !== 'deposit') {
